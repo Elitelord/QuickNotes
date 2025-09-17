@@ -23,7 +23,8 @@ console.log("✅ MongoDB connected");
 const noteSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
-    body: { type: String, default: "" }
+    body: { type: String, default: "" },
+    urgency: { type: Number, default: 0}
   },
   { timestamps: true }
 );
@@ -38,19 +39,19 @@ app.get("/api/notes", async (_req, res) => {
 
 // POST create
 app.post("/api/notes", async (req, res) => {
-  const { title, body } = req.body;
+  const { title, body, urgency } = req.body;
   if (!title?.trim()) return res.status(400).json({ error: "Title required" });
-  const note = await Note.create({ title: title.trim(), body: body ?? "" });
+  const note = await Note.create({ title: title.trim(), body: body ?? "", urgency: urgency ?? 0 });
   res.status(201).json(note);
 });
 
 // PUT update
 app.put("/api/notes/:id", async (req, res) => {
   const { id } = req.params;
-  const { title, body } = req.body;
+  const { title, body, urgency } = req.body;
   const updated = await Note.findByIdAndUpdate(
     id,
-    { ...(title !== undefined ? { title } : {}), ...(body !== undefined ? { body } : {}) },
+    { ...(title !== undefined ? { title } : {}), ...(body !== undefined ? { body } : {}), ...(urgency !== undefined ? { urgency } : {})},
     { new: true, runValidators: true }
   );
   if (!updated) return res.status(404).json({ error: "Not found" });

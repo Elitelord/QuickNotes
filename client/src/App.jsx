@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default function App() {
   const [notes, setNotes] = useState([]);
-  const [form, setForm] = useState({ title: "", body: "" });
+  const [form, setForm] = useState({ title: "", body: "", urgency: 0});
   const [editing, setEditing] = useState(null); // note _id being edited
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -30,7 +30,7 @@ export default function App() {
     try {
       const { data } = await axios.post("/api/notes", form);
       setNotes((prev) => [data, ...prev]);
-      setForm({ title: "", body: "" });
+      setForm({ title: "", body: "", urgency: 0});
     } catch (e) {
       setErr(e?.response?.data?.error || e.message);
     }
@@ -79,6 +79,13 @@ export default function App() {
           rows={3}
           style={{ padding: 10, borderRadius: 8, border: "1px solid #ddd" }}
         />
+        <label> Level of Urgency: </label>
+        <input 
+        placeholder= {0}
+        value = {form.urgency}
+        onChange={(e) => setForm({ ...form, urgency: e.target.value})}
+        style={{ padding: 10, borderRadius: 8, border: "1px solid #ddd" }}
+        />
         <button type="submit" style={{ padding: "10px 14px", borderRadius: 8, border: "none", background: "#111", color: "white" }}>
           Add Note
         </button>
@@ -113,6 +120,9 @@ function ViewCard({ note, onEdit, onDelete }) {
         </div>
       </div>
       {note.body && <p style={{ whiteSpace: "pre-wrap", marginTop: 8 }}>{note.body}</p>}
+      <hr></hr>
+      <p style={{ whiteSpace: "pre-wrap", marginTop: 4 }} ><b>Level of Urgency</b></p>
+      {note.urgency && <p style={{ whiteSpace: "pre-wrap", marginTop: 4 }}>{note.urgency}</p>}
       <small style={{ color: "#666" }}>
         Updated: {new Date(note.updatedAt).toLocaleString()}
       </small>
@@ -123,12 +133,14 @@ function ViewCard({ note, onEdit, onDelete }) {
 function EditCard({ note, onSave, onCancel }) {
   const [title, setTitle] = useState(note.title);
   const [body, setBody] = useState(note.body ?? "");
+  const [urgency, setUrgency] = useState(note.urgency ?? 0);
   return (
     <div style={{ display: "grid", gap: 8 }}>
       <input value={title} onChange={(e) => setTitle(e.target.value)} style={input} />
       <textarea rows={3} value={body} onChange={(e) => setBody(e.target.value)} style={input} />
+      <input value = {urgency} onChange={(e) => setUrgency(e.target.value)} style = {input}/>
       <div style={{ display: "flex", gap: 8 }}>
-        <button onClick={() => onSave(note._id, { title, body })} style={btn}>Save</button>
+        <button onClick={() => onSave(note._id, { title, body, urgency })} style={btn}>Save</button>
         <button onClick={onCancel} style={{ ...btn, background: "#999" }}>Cancel</button>
       </div>
     </div>
