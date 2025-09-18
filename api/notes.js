@@ -12,7 +12,11 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
       const { title, body, urgency } = req.body || {};
       if (!title || !title.trim()) return res.status(400).json({ error: "Title required" });
-      const note = await Note.create({ title: title.trim(), body: body ?? "", urgency: Number(urgency) || 0 });
+      const note = await Note.create({
+        title: title.trim(),
+        body: body ?? "",
+        urgency: Number(urgency) || 0
+      });
       return res.status(201).json(note);
     }
 

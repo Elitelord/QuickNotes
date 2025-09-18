@@ -3,7 +3,7 @@ import { connectToDB, Note } from "./_db.js";
 export default async function handler(req, res) {
   try {
     await connectToDB();
-    const { id } = req.query; // vercel functions parse [id] as req.query.id
+    const { id } = req.query;
 
     if (req.method === "PUT") {
       const patch = req.body || {};
