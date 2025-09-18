@@ -1,0 +1,13 @@
+{
+  "buildCommand": "npm --prefix client ci && npm --prefix client run build",
+  "outputDirectory": "client/dist",
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/client/dist/$1" }
+  ]
+}
