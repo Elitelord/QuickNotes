@@ -115,7 +115,16 @@
     return new Date(b.updatedAt) - new Date(a.updatedAt);
   });
     return (
-      <div style={{ maxWidth: 1000, margin: "24px auto", padding: 20, fontFamily: "system-ui, sans-serif" }}>
+      <div style={{
+        width: "100%",
+        minHeight: "100vh",
+        display: "grid",
+        justifyItems: "center",   
+        alignContent: "start",    
+        padding: 200,
+        background: "#222",
+      }}>
+      <div style={{width: 500, padding: 20, fontFamily: "system-ui, sans-serif" }}>
         <h1>QuickNotes</h1>
 
         <form onSubmit={submitNew} style={{ display: "grid", gap: 8, marginBottom: 24 }}>
@@ -161,6 +170,7 @@
             </li>
           ))}
         </ul>
+      </div>
       </div>
     );
   }
